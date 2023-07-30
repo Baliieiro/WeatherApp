@@ -1,0 +1,8 @@
+.container {
+  background-color: var(--cor-primaria);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 2rem;
+  color: var(--cor-texto);
+  border-radius: 1rem;
+  max-width: 400px;
+}

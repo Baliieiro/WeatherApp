@@ -1,46 +1,49 @@
-import { useEffect, useState } from "react"
-import Container from "./components/Container"
-import FormContainer from "./components/FormContainer"
-import WeatherCard from "./components/WeatherCard"
-import ErrorMessage from "./components/ErrorMessage"
-import Suggestions from "./components/Suggestions"
+import { useEffect, useState } from "react";
+import Container from "./components/Container";
+import FormContainer from "./components/FormContainer";
+import WeatherCard from "./components/WeatherCard";
+import ErrorMessage from "./components/ErrorMessage";
+import Suggestions from "./components/Suggestions";
 
-const apiKey = import.meta.env.VITE_API_KEY
+const apiKey = "8b9d745b6e6ddc41fd4b12bb0dd73489";
 
 function App() {
-  const [city, setCity] = useState('')
+  const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [searchClicked, setSearchClicked] = useState(false);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([
-    'New York',
-    'London',
-    'Paris',
-    'Tokyo',
-    'Sydney',
-    'Rio de Janeiro',
-    'Berlin',
-    'Rome',])
+    "New York",
+    "London",
+    "Paris",
+    "Tokyo",
+    "Sydney",
+    "Rio de Janeiro",
+    "Berlin",
+    "Rome",
+  ]);
 
   const handleSearchClick = () => {
     setSearchClicked(true);
-  }
+  };
 
   const handleKeyUp = (e) => {
-    if (e.key === 'Enter') {
-      handleSearchClick()
+    if (e.key === "Enter") {
+      handleSearchClick();
     }
-  }
+  };
   const handleSuggestionClick = (suggestion) => {
     setCity(suggestion);
-    handleSearchClick()
+    handleSearchClick();
   };
 
   const fetchWeatherData = async () => {
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`)
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`
+    )
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Cidade não encontrada');
+          throw new Error("Cidade não encontrada");
         }
         return response.json();
       })
@@ -50,22 +53,22 @@ function App() {
       })
       .catch((error) => {
         setError(error.message);
-        console.error('Error fetching weather data:', error);
+        console.error("Error fetching weather data:", error);
       });
 
-    setCity('')
-  }
+    setCity("");
+  };
 
   useEffect(() => {
-    setWeatherData(null)
-  }, [city])
+    setWeatherData(null);
+  }, [city]);
 
   useEffect(() => {
-    if (searchClicked && city.trim() !== '') {
+    if (searchClicked && city.trim() !== "") {
       fetchWeatherData();
-      setSearchClicked(false)
+      setSearchClicked(false);
     }
-  }, [searchClicked, city])
+  }, [searchClicked, city]);
 
   return (
     <>
@@ -78,15 +81,15 @@ function App() {
         />
         {error && <ErrorMessage />}
         {weatherData && <WeatherCard weather={weatherData} />}
-        {suggestions.length > 0 &&
-          weatherData === null &&
+        {suggestions.length > 0 && weatherData === null && (
           <Suggestions
             suggestions={suggestions}
             handleSuggestionClick={handleSuggestionClick}
-          />}
+          />
+        )}
       </Container>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
